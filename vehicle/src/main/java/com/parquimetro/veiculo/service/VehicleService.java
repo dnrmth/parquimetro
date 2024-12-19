@@ -1,7 +1,9 @@
 package com.parquimetro.veiculo.service;
 
+import com.parquimetro.veiculo.client.ParquimeterClient;
 import com.parquimetro.veiculo.dto.AdditionalHoursRegisterDTO;
 import com.parquimetro.veiculo.dto.AdditionalPaymentDTO;
+import com.parquimetro.veiculo.dto.VehicleDto;
 import com.parquimetro.veiculo.dto.VehicleRegisterDTO;
 import com.parquimetro.veiculo.enums.VehicleType;
 import com.parquimetro.veiculo.model.Parquimeter;
@@ -22,6 +24,9 @@ public class VehicleService {
 
     @Autowired
     VehicleRepository vehicleRepository;
+
+    @Autowired
+    ParquimeterClient parquimeterClient;
 
     public void registerVehicle(VehicleRegisterDTO vehicleRegisterDTO) {
         Vehicle vehicle = new Vehicle();
@@ -48,6 +53,10 @@ public class VehicleService {
         payment.setPaymentAmount(parkingPrice);
 
         vehicle.getPayments().add(payment);
+
+        VehicleDto vehicleDto = new VehicleDto(vehicleRegisterDTO.plate(), LocalDateTime.now(),
+                LocalDateTime.now().plusHours(vehicleRegisterDTO.estimatedHours()));
+        parquimeterClient.sendParkingInformationToSave(vehicleDto);
 
         vehicleRepository.save(vehicle);
     }

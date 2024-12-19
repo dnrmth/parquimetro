@@ -22,7 +22,7 @@ public class ParquimeterController {
     private ParquimeterService parquimeterService;
 
     @Operation(
-            summary = "Registrode parquímetro",
+            summary = "Registro de parquímetro",
             description = """
                     A chamada deste endpoint é feita diretamente pelo serviço registro ou atualização de um parquímetro""")
     @ApiResponses(value = {
